@@ -10,6 +10,4 @@ uniform float		alpha;
 void main()
 {
 	FragColor = mix(texture(texture1, texCoord), texture(texture2, vec2(-1 * texCoord.x,texCoord.y)), alpha);
-//	FragColor = vec4(color.x, color.y, color.z, 1.0f);
-	
 };

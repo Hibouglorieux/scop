@@ -111,7 +111,7 @@ int main( void )
 	   -0.5, -0.5, 0.0,		0.6, 0.6, 0.0,		0.0, 0.0,
 	   };
 	   */
-	float vertices[] = {
+	/*float vertices[] = {
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 		0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
 		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
@@ -158,6 +158,7 @@ int main( void )
 		0, 1, 2,
 		0, 3, 2
 	};
+	*/
 
 	//init vertex
 	GLuint VAO, vertexbuffer, EBO;
@@ -169,20 +170,14 @@ int main( void )
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elem_array_buffer), elem_array_buffer, GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elem_array_buffer), elem_array_buffer, GL_STATIC_DRAW);
 
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)0);
+	//glEnableVertexAttribArray(0);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)0);
+	//glEnableVertexAttribArray(2);
+	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)(3 * sizeof(float)));
 
-	//glEnableVertexAttribArray(1);
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (void*)(3 * sizeof(float)));
-
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)(3 * sizeof(float)));
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0); // free memory
-	glBindVertexArray(0); // free
 
 	unsigned int shaderProgram = load_shader();
 	glUseProgram(shaderProgram);
@@ -213,16 +208,15 @@ int main( void )
 		.pos = (s_vector){0.0f, 0.0f, 3.0f, 1.0f},
 		.target = (s_vector){0.0f, 0.0f, 0.0f, 1.0f},
 		.pitch = 0.0f, 0.0f, 0.0f,
-		.parse_data = ft_parse_file("resources/42.obj")
+		.parse_data = ft_parse_file("resources/teapot2.obj")
 	};
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data.parse_data->nb_points, data.parse_data->points_data, GL_STATIC_DRAW);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * data.parse_data->nb_of_triangles, data.parse_data->triangles_data, GL_STATIC_DRAW);
-	printf("ok\n");
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data.parse_data.nb_points, data.parse_data.points_data, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * data.parse_data.nb_of_triangles, data.parse_data.triangles_data, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*)0);
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*)0);
-	loop(window, data);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*)sizeof(int));
+	loop(window, &data);
 
 	// Close OpenGL window and terminate GLFW
 	glfwTerminate();

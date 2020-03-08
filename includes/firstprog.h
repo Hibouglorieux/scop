@@ -17,7 +17,7 @@ typedef struct parsing
 	int		nb_points;
 	float*	points_data;	
 	int		nb_of_triangles;
-	int*	triangles_data;
+	GLuint*	triangles_data;
 }				s_parsing;
 
 typedef struct	vector
@@ -49,7 +49,7 @@ typedef struct loop_data
 
 void				processInput(GLFWwindow *window, s_loop_data* alpha);
 unsigned int		load_shader();
-void				loop(GLFWwindow *window, s_loop_data data);
+void				loop(GLFWwindow *window, s_loop_data* data);
 s_matrix			ini_camera(s_vector pos, s_vector target);
 GLfloat*			export_matrix(s_matrix* matrix);
 s_matrix			mult_matrix(s_matrix a, s_matrix b);
