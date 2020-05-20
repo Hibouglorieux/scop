@@ -161,14 +161,16 @@ int main( void )
 	*/
 
 	//init vertex
-	GLuint VAO, vertexbuffer, EBO;
+	GLuint VAO, vertexbuffer, EBO, texturebuffer;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &vertexbuffer);
 	glGenBuffers(1, &EBO);
+	glGenBuffers(1, &texturebuffer);
 
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBindBuffer(GL_TEXTURE_BUFFER, texturebuffer);
 
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elem_array_buffer), elem_array_buffer, GL_STATIC_DRAW);
@@ -208,9 +210,10 @@ int main( void )
 		.pos = (s_vector){0.0f, 0.0f, 3.0f, 1.0f},
 		.target = (s_vector){0.0f, 0.0f, 0.0f, 1.0f},
 		.pitch = 0.0f, 0.0f, 0.0f,
-		.parse_data = ft_parse_file("resources/teapot2.obj")
+		.parse_data = ft_parse_file("resources/42.obj")
 	};
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data.parse_data.nb_points, data.parse_data.points_data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data.parse_data.nb_points * 3, data.parse_data.points_data, GL_STATIC_DRAW);
+	glBufferData(GL_TEXTURE_BUFFER, sizeof(float) * data.parse_data.nb_of_triangles * 3 * 2, data.parse_data.texture_data, GL_STATIC_DRAW);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * data.parse_data.nb_of_triangles, data.parse_data.triangles_data, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*)0);

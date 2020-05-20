@@ -6,7 +6,7 @@
 /*   By: nathan <nallani@student.s19.be>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/09 17:09:10 by nathan            #+#    #+#             */
-/*   Updated: 2020/03/08 17:15:38 by nathan           ###   ########.fr       */
+/*   Updated: 2020/04/10 00:01:15 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ void	loop(GLFWwindow* window, s_loop_data* data)
 	float alphaLoc = glGetUniformLocation(data->shaderProgram, "alpha");
 	GLuint viewMatrixLoc = glGetUniformLocation(data->shaderProgram, "view");
 	while( glfwWindowShouldClose(window) == 0 )
-	{
-		
+	{	
 		data->deltaTime = glfwGetTime() - oldTime;
 		oldTime = data->deltaTime;
 		//input 
@@ -42,5 +41,6 @@ void	loop(GLFWwindow* window, s_loop_data* data)
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+		usleep(100000);
 	} // Check if the ESC key was pressed or the window was closed
 }

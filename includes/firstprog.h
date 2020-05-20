@@ -3,7 +3,7 @@
 
 #include <GL/glew.h>
 #include <GL/gl.h>
-#include <GL/glext.h>
+//#include <GL/glext.h>
 #include <glfw3.h>
 #include <math.h>
 #include <stdbool.h>
@@ -18,7 +18,17 @@ typedef struct parsing
 	float*	points_data;	
 	int		nb_of_triangles;
 	GLuint*	triangles_data;
+	int		nb_of_faces;
+	int*	triangle_per_face;
+	float*	texture_data;
 }				s_parsing;
+
+typedef struct	vec2
+{
+	float x;
+	float y;
+}				s_vec2;
+		
 
 typedef struct	vector
 {
