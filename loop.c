@@ -6,7 +6,7 @@
 /*   By: nathan <nallani@student.s19.be>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/09 17:09:10 by nathan            #+#    #+#             */
-/*   Updated: 2020/04/10 00:01:15 by nathan           ###   ########.fr       */
+/*   Updated: 2020/05/23 16:25:08 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,11 @@ void	loop(GLFWwindow* window, s_loop_data* data)
 		//matrix = mult_matrix(matrix, mult_matrix(create_x_rot_matrix(to_rad(20) * glfwGetTime()), create_y_rot_matrix(to_rad(to_rad(1)) * glfwGetTime())));
 		matrix = mult_matrix(matrix, create_y_rot_matrix(to_rad(30) * glfwGetTime()));
 		glUniformMatrix4fv(matrixLoc, 1, GL_TRUE, export_matrix(&matrix));
-		glDrawElements(GL_TRIANGLES, data->parse_data.nb_of_triangles, GL_UNSIGNED_INT, (void*)0);//TODO problem here
+		//glDrawElements(GL_TRIANGLES, data->parse_data.nb_of_triangles, GL_UNSIGNED_INT, (void*)0);//TODO problem here
+		glDrawArrays(GL_TRIANGLES, 0, data->parse_data.nb_triangles * 3);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
-		usleep(100000);
+		//usleep(100000);
 	} // Check if the ESC key was pressed or the window was closed
 }

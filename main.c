@@ -210,15 +210,13 @@ int main( void )
 		.pos = (s_vector){0.0f, 0.0f, 3.0f, 1.0f},
 		.target = (s_vector){0.0f, 0.0f, 0.0f, 1.0f},
 		.pitch = 0.0f, 0.0f, 0.0f,
-		.parse_data = ft_parse_file("resources/42.obj")
+		.parse_data = new_ft_parse_file("resources/42.obj")
 	};
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data.parse_data.nb_points * 3, data.parse_data.points_data, GL_STATIC_DRAW);
-	glBufferData(GL_TEXTURE_BUFFER, sizeof(float) * data.parse_data.nb_of_triangles * 3 * 2, data.parse_data.texture_data, GL_STATIC_DRAW);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * data.parse_data.nb_of_triangles, data.parse_data.triangles_data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data.parse_data.nb_points * (3 + 2), data.parse_data.data, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * (3 + 2), (void*)0);
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*)sizeof(int));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * (3 + 2), FLOAT_BUFFER_OFFSET(3));
 	loop(window, &data);
 
 	// Close OpenGL window and terminate GLFW

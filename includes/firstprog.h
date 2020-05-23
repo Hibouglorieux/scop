@@ -11,6 +11,7 @@
 
 #define SCREEN_WIDTH 800.0f
 #define SCREEN_HEIGHT 600.0f
+#define FLOAT_BUFFER_OFFSET(i) (void*)(NULL + sizeof(float) * i)
 
 typedef struct parsing
 {
@@ -23,13 +24,27 @@ typedef struct parsing
 	float*	texture_data;
 }				s_parsing;
 
+typedef struct exploitable_parsed_data
+{
+	float*	data; // nb_points * (3(xyz) + 2(texturecoords))
+	int		nb_points;
+	int		nb_triangles;
+}				s_exploitable_parsed_data;
+
+typedef struct internal_tmp_parsing
+{
+	int*		points_index;
+	int			nb_triangles;
+	int			nb_unique_points;
+	float*		raw_points;
+}				s_internal_tmp_parsing;
+
 typedef struct	vec2
 {
 	float x;
 	float y;
 }				s_vec2;
 		
-
 typedef struct	vector
 {
 	float x;
@@ -54,7 +69,7 @@ typedef struct loop_data
 	float			pitch;
 	float			yaw;
 	float			deltaTime;
-	s_parsing		parse_data;
+	s_exploitable_parsed_data		parse_data;
 }				s_loop_data;
 
 void				processInput(GLFWwindow *window, s_loop_data* alpha);
@@ -79,5 +94,6 @@ s_vector			normalize(s_vector a);
 void				print_vector(s_vector a);
 
 s_parsing			ft_parse_file(char* path_to_file);
+s_exploitable_parsed_data	new_ft_parse_file(char* path_to_file);
 
 # endif
