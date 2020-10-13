@@ -1,5 +1,5 @@
 
-NAME = openglstuff
+NAME = scop
 
 FILES = main.c handle_input.c shaderManager.c loop.c matrix_operation.c math_util.c obj_parser.c 
 
@@ -11,15 +11,18 @@ LIBS = -lglfw -lX11 -lXrandr -lXinerama -lXi -lXxf86vm -lXcursor -lGL -lpthread 
 all: $(NAME)
 
 $(NAME): $(OBJ)
+	@make -C libft
 	$(CC) $^ -o $@ $(LIBS)
 
-obj/%.o:%.c includes/*.h
+obj/%.o:src/%.c includes/*.h
 	$(CC) -g -Wall -Wextra -c $< -o $@ -Iincludes -Ilibft
 
 clean :
+	@make clean -C libft
 	rm -rf $(OBJ)
 
 fclean : clean
+	@make fclean -C libft
 	rm -rf $(NAME)
 
 re : fclean all
