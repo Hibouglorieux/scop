@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shaderManager.c                                    :+:      :+:    :+:   */
+/*   shader_manager.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nathan <nallani@student.s19.be>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/09 16:04:55 by nathan            #+#    #+#             */
-/*   Updated: 2020/02/09 17:08:20 by nathan           ###   ########.fr       */
+/*   Updated: 2021/01/09 00:26:55 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@
 #define VERTEX_SHADER_SOURCE "shaders/basicshader.vert"
 #define FRAGMENT_SHADER_SOURCE "shaders/fragment.frag"
 
-char* load_shader_as_string(char *str)
+char			*load_shader_as_string(char *str)
 {
-	int fd;
-	long size;
-	char* buf;
+	int		fd;
+	long	size;
+	char	*buf;
 
 	fd = open(str, O_RDONLY);
 	assert(fd != -1);
@@ -38,57 +38,65 @@ char* load_shader_as_string(char *str)
 	return (buf);
 }
 
-unsigned int intern_load_shader(char *str, int option)
+GLuint	intern_load_shader(char *str, int option)
 {
-	unsigned int retvalue;
-	char infoLog[512];
-	int success;
+	GLuint	retvalue;
+	char			info_log[512];
+	int				success;
 
 	retvalue = glCreateShader(option);
-	glShaderSource(retvalue, 1, (const char * const *)&str, NULL);
+	glShaderSource(retvalue, 1, (const char *const *)&str, NULL);
 	glCompileShader(retvalue);
 	free(str);
 	glGetShaderiv(retvalue, GL_COMPILE_STATUS, &success);
 	if (!success)
 	{
-		glGetShaderInfoLog(retvalue, 512, NULL, infoLog);
-		printf("problem with shader compilation: %s\n", infoLog);
+		glGetShaderInfoLog(retvalue, 512, NULL, info_log);
+		fprintf(stderr, "problem with shader compilation: %s\n", info_log);
 		assert(false);
 	}
 	return (retvalue);
 }
 
-unsigned int	compile_shader_program(unsigned int vertex, unsigned int frag)
+GLuint	compile_shader_program(GLuint vertex, GLuint frag)
 {
-	unsigned int	shaderProgram;
+	GLuint	shader_program;
 	int				success;
-	char			infoLog[512];
+	char			info_log[512];
 
-	shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, frag);
-	glAttachShader(shaderProgram, vertex);
-	glLinkProgram(shaderProgram);
+	shader_program = glCreateProgram();
+	glAttachShader(shader_program, frag);
+	glAttachShader(shader_program, vertex);
+	glLinkProgram(shader_program);
 	glDeleteShader(vertex);
 	glDeleteShader(frag);
-	glGetProgramiv(shaderProgram, GL_COMPILE_STATUS, &success);
+	glGetProgramiv(shader_program, GL_COMPILE_STATUS, &success);
 	if (!success)
 	{
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		printf("Problem with shader linkage: %s\n", infoLog);
+		glGetProgramInfoLog(shader_program, 512, NULL, info_log);
+		fprintf(stderr, "Problem with shader linkage: %s\n", info_log);
 		return (0);
 	}
-	return (shaderProgram);
+	return (shader_program);
 }
 
-unsigned int	load_shader()
-{	
-	unsigned int vertexShader;
-	unsigned int fragmentShader;
-	unsigned int shaderProgram;
+GLuint	load_shader(void)
+{
+	GLuint vertex_shader;
+	GLuint fragment_shader;
+	GLuint shader_program;
 
-	vertexShader = intern_load_shader(load_shader_as_string(VERTEX_SHADER_SOURCE), GL_VERTEX_SHADER);
-	fragmentShader = intern_load_shader(load_shader_as_string(FRAGMENT_SHADER_SOURCE), GL_FRAGMENT_SHADER);
-	shaderProgram = compile_shader_program(vertexShader, fragmentShader);
-	assert(shaderProgram);
-	return (shaderProgram);
+	vertex_shader = intern_load_shader(
+			load_shader_as_string(VERTEX_SHADER_SOURCE), GL_VERTEX_SHADER);
+	fragment_shader = intern_load_shader(
+			load_shader_as_string(FRAGMENT_SHADER_SOURCE), GL_FRAGMENT_SHADER);
+	shader_program = compile_shader_program(vertex_shader, fragment_shader);
+	assert(shader_program);
+	return (shader_program);
+}
+
+GLuint	init_shader(GLuint shader_program)
+{
+	glUseProgram(shader_program);
+	return (shader_program);
 }

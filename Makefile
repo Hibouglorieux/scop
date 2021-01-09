@@ -1,7 +1,8 @@
 
 NAME = scop
 
-FILES = main.c handle_input.c shaderManager.c loop.c matrix_operation.c math_util.c obj_parser.c 
+FILES = main.c initialize.c handle_input.c shader_manager.c loop.c \
+		matrix_operation.c math_util.c obj_parser.c 
 
 OBJ = $(addprefix obj/,$(FILES:.c=.o))
 
@@ -19,7 +20,7 @@ obj/%.o:src/%.c includes/*.h
 
 clean :
 	@make clean -C libft
-	rm -rf $(OBJ)
+	rm -rf *.o
 
 fclean : clean
 	@make fclean -C libft
