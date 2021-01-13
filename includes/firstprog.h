@@ -48,6 +48,13 @@ typedef struct	matrixes
 	s_matrix model;
 }				s_matrixes;
 
+typedef struct	locations
+{
+	GLuint		model_matrix;
+	GLuint		view_matrix;
+	GLuint		texture_factor;
+}				s_locations;
+
 typedef struct loop_data
 {
 	GLuint			vao;
@@ -61,6 +68,7 @@ typedef struct loop_data
 	float			pitch;
 	float			yaw;
 	int				how_to_render;
+	s_locations		uniforms;
 	s_parsed_data		parse_data;
 }				s_loop_data;
 
@@ -98,24 +106,42 @@ GLuint				load_texture(char *path, bool has_alpha);
 int					glfw_init(GLFWwindow **window);
 int					glew_init(void);
 
+/*
+ * obj_parser2.c
+ */
+extern void			copy_triangles(int end_index, int *dest, int *src);
+extern void			load_triangles(char *buf, int index[4], int *index_found);
 
-GLfloat*			export_matrix(s_matrix* matrix);
-s_matrix			mult_matrix(s_matrix a, s_matrix b);
-s_matrix			create_x_rot_matrix(float angle);
-s_matrix			create_y_rot_matrix(float angle);
-s_matrix			create_z_rot_matrix(float angle);
-s_matrix			create_scale_matrix(float x, float y, float z);
-s_matrix			new_matrix();
-s_matrix			create_proj_matrix(float fov, float aspect, float near, float far);
-s_matrix			create_translation_matrix(float x, float y, float z);
-void				print_matrix(s_matrix a);
+/*
+ * obj_parser.c
+ */
+s_parsed_data		parse_file(char* path_to_file);
+
+/*
+ * math_util.c
+ */
 float				to_rad(float f);
 s_vector			add_vector(s_vector a, s_vector b);
 s_vector			sub_vector(s_vector a, s_vector b);
 s_vector			cross_product(s_vector a, s_vector b);
 s_vector			normalize(s_vector a);
-void				print_vector(s_vector a);
 
-s_parsed_data		parse_file(char* path_to_file);
+
+/*
+ * matrix.c
+ */
+s_matrix			create_proj_matrix(float fov, float aspect, float near, float far);
+s_matrix			create_scale_matrix(float x, float y, float z);
+s_matrix			create_translation_matrix(float x, float y, float z);
+s_matrix			new_matrix(void);
+
+/*
+ * matrix_operation.c
+ */
+GLfloat*			export_matrix(s_matrix* matrix);
+s_matrix			mult_matrix(s_matrix a, s_matrix b);
+s_matrix			create_x_rot_matrix(float angle);
+s_matrix			create_y_rot_matrix(float angle);
+s_matrix			create_z_rot_matrix(float angle);
 
 # endif

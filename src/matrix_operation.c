@@ -6,17 +6,16 @@
 /*   By: nathan <nallani@student.s19.be>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 00:15:03 by nathan            #+#    #+#             */
-/*   Updated: 2020/02/16 18:53:15 by nathan           ###   ########.fr       */
+/*   Updated: 2021/01/13 10:56:15 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "firstprog.h"
-#include <stdio.h>
+#include "scop.h"
 
-GLfloat*	export_matrix(s_matrix* matrix)
+GLfloat		*export_matrix(t_matrix *matrix)
 {
-	static GLfloat new_mat[16];
-	int i;
+	static GLfloat	new_mat[16];
+	int				i;
 
 	i = 0;
 	while (i < 4)
@@ -30,65 +29,39 @@ GLfloat*	export_matrix(s_matrix* matrix)
 	return (new_mat);
 }
 
-//float		mult_vec_matric(s_vector vec, s_matrix, matrix);
-
-s_matrix	mult_matrix(s_matrix a, s_matrix b)
+t_matrix	mult_matrix(t_matrix a, t_matrix b)
 {
-	int firstRow = 0;
-	int firstColumn = 0;
-	int secondColumn = 0;
-	s_matrix new_matrix = {0};
+	int			first_row;
+	int			first_column;
+	int			second_column;
+	t_matrix	new_matrix;
 
-	firstRow = 0;
-	while (firstRow < 4)
+	new_matrix = (t_matrix){0};
+	first_row = 0;
+	while (first_row < 4)
 	{
-		firstColumn = 0;
-		while (firstColumn < 4)
+		first_column = 0;
+		while (first_column < 4)
 		{
-			secondColumn = 0;
-			while (secondColumn < 4)
+			second_column = 0;
+			while (second_column < 4)
 			{
-				new_matrix.p[firstRow][firstColumn] += a.p[firstRow][secondColumn] * b.p[secondColumn][firstColumn];
-				secondColumn++;
+				new_matrix.p[first_row][first_column] += a.p[first_row]
+					[second_column] * b.p[second_column][first_column];
+				second_column++;
 			}
-			firstColumn++;
+			first_column++;
 		}
-		firstRow++;
+		first_row++;
 	}
 	return (new_matrix);
 }
 
-void	print_matrix(s_matrix a)
+t_matrix	create_x_rot_matrix(float angle)
 {
-	int i;
+	t_matrix matrix;
 
-	i = 0;
-	while (i < 4)
-	{
-		printf("|%.3f |  %.3f | %.3f | %.3f|\n", a.p[i][0], a.p[i][1], a.p[i][2], a.p[i][3]);
-		i++;
-	}
-}
-
-s_matrix	create_proj_matrix(float fov, float aspect, float near, float far)
-{
-	s_matrix new_matrix;
-
-	float tanHalfFov = tan(to_rad(fov) / 2);
-	new_matrix = (s_matrix){ .p = {
-		{1 / (aspect * tanHalfFov), 0 , 0, 0},
-		{0, 1 / tanHalfFov, 0, 0},
-		{0, 0 , -(far + near) / (far - near), (-2 * far * near) / (far - near)},
-		{0, 0 , -1, 1}}
-	};
-	return (new_matrix);
-}
-
-s_matrix	create_x_rot_matrix(float angle)
-{
-	s_matrix matrix;
-
-	matrix = (s_matrix){ .p = {
+	matrix = (t_matrix){ .p = {
 		{1, 0, 0, 0},
 		{0, cos(angle), -sin(angle), 0},
 		{0, sin(angle), cos(angle), 0},
@@ -97,11 +70,11 @@ s_matrix	create_x_rot_matrix(float angle)
 	return (matrix);
 }
 
-s_matrix	create_y_rot_matrix(float angle)
+t_matrix	create_y_rot_matrix(float angle)
 {
-	s_matrix matrix;
+	t_matrix matrix;
 
-	matrix = (s_matrix){ .p = {
+	matrix = (t_matrix){ .p = {
 		{cos(angle), 0, sin(angle), 0},
 		{0, 1, 0, 0},
 		{-sin(angle), 0, cos(angle), 0},
@@ -110,52 +83,13 @@ s_matrix	create_y_rot_matrix(float angle)
 	return (matrix);
 }
 
-s_matrix	create_z_rot_matrix(float angle)
+t_matrix	create_z_rot_matrix(float angle)
 {
-	s_matrix matrix;
+	t_matrix matrix;
 
-	matrix = (s_matrix){ .p = {
+	matrix = (t_matrix){ .p = {
 		{cos(angle), -sin(angle), 0, 0},
 		{sin(angle), cos(angle), 0, 0},
-		{0, 0, 1, 0},
-		{0, 0, 0, 1}}
-	};
-	return (matrix);
-}
-
-s_matrix	create_translation_matrix(float x, float y, float z)
-{
-	s_matrix matrix;
-
-	matrix = (s_matrix){ .p = {
-		{1, 0, 0, x},
-		{0, 1, 0, y},
-		{0, 0, 1, z},
-		{0, 0, 0, 1}}
-	};
-	return (matrix);
-}
-
-s_matrix	create_scale_matrix(float x, float y, float z)
-{
-	s_matrix matrix;
-
-	matrix = (s_matrix){ .p = {
-		{x == 0 ? 1 : x, 0, 0, 0},
-		{0, y == 0 ? 1 : y, 0, 0},
-		{0, 0, z == 0 ? 1 : z, 0},
-		{0, 0, 0, 1}}
-	};
-	return (matrix);
-}
-
-s_matrix	new_matrix()
-{
-	s_matrix matrix;
-
-	matrix = (s_matrix){ .p = {
-		{1, 0, 0, 0},
-		{0, 1, 0, 0},
 		{0, 0, 1, 0},
 		{0, 0, 0, 1}}
 	};

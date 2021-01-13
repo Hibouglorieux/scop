@@ -6,13 +6,13 @@
 /*   By: nathan <unkown@noaddress.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/09 13:08:44 by nathan            #+#    #+#             */
-/*   Updated: 2021/01/09 00:37:48 by nathan           ###   ########.fr       */
+/*   Updated: 2021/01/13 10:56:15 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "firstprog.h"
+#include "scop.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #define DEFAULT_FILE "resources/42.obj"
@@ -39,7 +39,6 @@ int		glfw_init(GLFWwindow **window)
 		glfwTerminate();
 		return (-1);
 	}
-//	glfwSetInputMode(*window, GLFW_STICKY_KEYS, GL_TRUE);
 	glfwMakeContextCurrent(*window);
 	return (0);
 }
@@ -83,7 +82,7 @@ GLuint	load_texture(char *path, bool has_alpha)
 	return (id);
 }
 
-void	release_data(s_loop_data *data)
+void	release_data(t_loop_data *data)
 {
 	glDeleteBuffers(1, &data->vbo);
 	glDeleteVertexArrays(1, &data->vao);
@@ -96,7 +95,7 @@ int		main(int argc, char **argv)
 {
 	GLFWwindow	*window;
 	char		*file_path;
-	s_loop_data	data;
+	t_loop_data	data;
 
 	if (initialize_libs_and_buffers(&window))
 		return (-1);
