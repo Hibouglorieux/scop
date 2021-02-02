@@ -6,7 +6,7 @@
 /*   By: nathan <unkown@noaddress.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 23:12:24 by nathan            #+#    #+#             */
-/*   Updated: 2021/01/13 10:56:15 by nathan           ###   ########.fr       */
+/*   Updated: 2021/02/02 22:45:56 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,12 @@ t_matrix		ini_camera(t_vector pos, t_vector target)
 	};
 }
 
-t_matrixes		initialize_matrixes(GLuint shader_program)
+t_matrixes		initialize_matrixes(GLuint shader_program,
+		t_parsed_data *parse_data)
 {
 	t_matrixes matrixes;
 
-	matrixes.model = create_x_rot_matrix(to_rad(-55));
+	matrixes.model = center_model_mat(parse_data);
 	matrixes.view = ini_camera((t_vector){0.0f, 0.0f, 3.0f, 1.0f},
 			(t_vector){0.0f, 0.0f, 0.0f, 1.0f});
 	matrixes.projection = create_proj_matrix(45, SCREEN_WIDTH / SCREEN_HEIGHT,
@@ -79,7 +80,8 @@ void			initialize_data(t_loop_data *data, char **file_path)
 	data->parse_data = parse_file(*file_path);
 	free(*file_path);
 	*file_path = NULL;
-	data->matrixes = initialize_matrixes(data->shader_program);
+	data->matrixes = initialize_matrixes(data->shader_program,
+			&data->parse_data);
 	data->pos = (t_vector){0.0f, 0.0f, 3.0f, 1.0f};
 	data->target = (t_vector){0.0f, 0.0f, 0.0f, 1.0f};
 	data->how_to_render = 0;

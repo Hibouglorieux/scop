@@ -6,7 +6,7 @@
 /*   By: nathan <nallani@student.s19.be>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/09 17:09:10 by nathan            #+#    #+#             */
-/*   Updated: 2021/01/13 10:56:15 by nathan           ###   ########.fr       */
+/*   Updated: 2021/02/02 22:45:02 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,16 @@
 
 void	update_matrixes(t_loop_data *data)
 {
+	t_matrix rotated_model;
+
+	rotated_model = new_matrix();
 	data->matrixes.view = ini_camera(data->pos, data->target);
 	glUniformMatrix4fv(data->uniforms.view_matrix, 1, GL_TRUE,
 			export_matrix(&data->matrixes.view));
-	data->matrixes.model = mult_matrix(new_matrix(),
-			create_y_rot_matrix(to_rad(30) * glfwGetTime()));
+	rotated_model = mult_matrix(create_y_rot_matrix(to_rad(30) *
+				glfwGetTime()), data->matrixes.model);
 	glUniformMatrix4fv(data->uniforms.model_matrix, 1, GL_TRUE,
-			export_matrix(&data->matrixes.model));
+			export_matrix(&rotated_model));
 }
 
 void	update_texture_factor(t_loop_data *data)
