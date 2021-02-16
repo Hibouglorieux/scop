@@ -6,7 +6,7 @@
 /*   By: nathan <unkown@noaddress.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/09 20:13:00 by nathan            #+#    #+#             */
-/*   Updated: 2021/02/02 22:30:00 by nathan           ###   ########.fr       */
+/*   Updated: 2021/02/16 00:59:47 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,8 @@ void			loop(GLFWwindow *window, t_loop_data *data);
 /*
 ** initialize.c
 */
-t_matrixes		initialize_matrixes(GLuint shader_program, t_parsed_data *parse_data);
+t_matrixes		initialize_matrixes(GLuint shader_program,
+		t_parsed_data *parse_data);
 t_matrix		ini_camera(t_vector pos, t_vector dir);
 int				initialize_libs_and_buffers(GLFWwindow **window);
 void			initialize_buffers(t_loop_data *data);
@@ -116,9 +117,11 @@ int				glew_init(void);
 /*
 ** obj_parser2.c
 */
-extern t_matrix	center_model_mat(t_parsed_data *data);
-extern void		copy_triangles(int end_index, int *dest, int *src);
-extern void		load_triangles(char *buf, int index[4], int *index_found);
+
+int				scop_sscanf(const char *str, float f[3]);
+t_matrix		center_model_mat(t_parsed_data *data);
+void			copy_triangles(int end_index, int *dest, int *src);
+void			load_triangles(char *buf, int index[4], int *index_found);
 
 /*
 ** obj_parser.c

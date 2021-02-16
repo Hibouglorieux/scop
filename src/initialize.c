@@ -6,7 +6,7 @@
 /*   By: nathan <unkown@noaddress.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 23:12:24 by nathan            #+#    #+#             */
-/*   Updated: 2021/02/02 22:45:56 by nathan           ###   ########.fr       */
+/*   Updated: 2021/02/15 23:44:31 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,6 @@ void			initialize_buffers(t_loop_data *data)
 void			initialize_data(t_loop_data *data, char **file_path)
 {
 	data->parse_data = parse_file(*file_path);
-	free(*file_path);
-	*file_path = NULL;
 	data->matrixes = initialize_matrixes(data->shader_program,
 			&data->parse_data);
 	data->pos = (t_vector){0.0f, 0.0f, 3.0f, 1.0f};

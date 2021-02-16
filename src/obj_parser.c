@@ -6,15 +6,13 @@
 /*   By: nathan <nallani@student.s19.be>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 14:37:02 by nathan            #+#    #+#             */
-/*   Updated: 2021/01/13 10:56:15 by nathan           ###   ########.fr       */
+/*   Updated: 2021/02/16 01:49:57 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
 #include <assert.h>
-#include <stdio.h>
 #include <fcntl.h>
-#include <float.h>
 
 static void						initialize_triangles_data(char *buf,
 		t_internal_tmp_parsing *int_parse_data)
@@ -36,7 +34,7 @@ static void						initialize_triangles_data(char *buf,
 	int_parse_data->points_index = ptr;
 }
 
-static void						load_raw_points(char *buf,
+static int						load_raw_points(char *buf,
 		t_internal_tmp_parsing *int_parse_data)
 {
 	float	f[3];
@@ -44,7 +42,8 @@ static void						load_raw_points(char *buf,
 	int		i;
 	int		j;
 
-	assert(sscanf(buf, "v %f %f %f", &f[0], &f[1], &f[2]) == 3);
+	if (!scop_sscanf(buf, f))
+		return (0);
 	assert((ptr = malloc(sizeof(float) * (int_parse_data->nb_unique_points
 						* 3 + 3))) != NULL);
 	i = 0;
@@ -61,6 +60,7 @@ static void						load_raw_points(char *buf,
 	free(int_parse_data->raw_points);
 	int_parse_data->nb_unique_points++;
 	int_parse_data->raw_points = ptr;
+	return (1);
 }
 
 static t_parsed_data			treat_raw_data(
@@ -77,12 +77,13 @@ static t_parsed_data			treat_raw_data(
 	i = 0;
 	while (i < exp_data.nb_points)
 	{
-		j = 0;
-		while (j < 3)
+		j = -1;
+		assert(int_parse_data->points_index[i] < int_parse_data->
+				nb_unique_points && "invalid face parsed");
+		while (++j < 3)
 		{
 			exp_data.data[i * (3 + 2) + j] = int_parse_data->raw_points
 				[int_parse_data->points_index[i] * 3 + j];
-			j++;
 		}
 		exp_data.data[i * (3 + 2) + 3] = exp_data.data[i * (3 + 2)] +
 			exp_data.data[i * (3 + 2) + 2];
@@ -95,17 +96,19 @@ static t_parsed_data			treat_raw_data(
 static t_internal_tmp_parsing	initialize_internal_data(char *path_to_file)
 {
 	int						fd;
+	int						retval;
 	char					*buf;
 	t_internal_tmp_parsing	int_parse_data;
 
 	assert((fd = open(path_to_file, O_RDONLY)) != -1);
 	int_parse_data = (t_internal_tmp_parsing){NULL, 0, 0, NULL};
-	while (get_next_line(fd, &buf))
+	while ((retval = get_next_line(fd, &buf)))
 	{
+		assert(retval != -1);
 		if (buf[0] == 'f')
 			initialize_triangles_data(buf, &int_parse_data);
 		if (buf[0] == 'v' && buf[1] == ' ')
-			load_raw_points(buf, &int_parse_data);
+			assert(load_raw_points(buf, &int_parse_data) && "Parse Error");
 		free(buf);
 	}
 	close(fd);

@@ -6,15 +6,68 @@
 /*   By: nathan <unkown@noaddress.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/09 19:28:55 by nathan            #+#    #+#             */
-/*   Updated: 2021/02/02 22:45:36 by nathan           ###   ########.fr       */
+/*   Updated: 2021/02/16 01:50:30 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
 #include <assert.h>
 #include <float.h>
+#include <math.h>
 
-extern t_matrix		center_model_mat(t_parsed_data *parsed_data)
+static const char	*ftoi_assign(const char *str, float *assign)
+{
+	double	d;
+	float	sign;
+	int		point_found;
+	int		e;
+
+	d = 0.0;
+	sign = 1;
+	e = 0;
+	point_found = 0;
+	if (*str == '-' && str++ && (sign = 1))
+		sign *= -1;
+	while (ft_isdigit(*str) || *str == '.')
+	{
+		if (*str == '.' && ++point_found && str++)
+			continue;
+		if (point_found)
+			e--;
+		d = d * 10.0 + (*str - '0');
+		str++;
+	}
+	while (e++ < 0)
+		d *= 0.1;
+	*assign = (*str == ' ' || *str == '\0') ? (float)(d * sign) : NAN;
+	*assign = (point_found > 1) ? NAN : *assign;
+	return (str);
+}
+
+int					scop_sscanf(const char *str, float f[3])
+{
+	int	i;
+
+	i = 0;
+	if (str[0] != 'v' || str[1] != ' ')
+		return (0);
+	str = ftoi_assign(str + 2, &f[0]);
+	if (*str != ' ')
+		return (0);
+	str = ftoi_assign(str + 1, &f[1]);
+	if (*str != ' ')
+		return (0);
+	str = ftoi_assign(str + 1, &f[2]);
+	while (i < 3)
+	{
+		if (f[i] == NAN)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+t_matrix			center_model_mat(t_parsed_data *parsed_data)
 {
 	int		i;
 	int		j;
@@ -41,7 +94,7 @@ extern t_matrix		center_model_mat(t_parsed_data *parsed_data)
 				(max[2] - min[2]) / -2.f - min[2]));
 }
 
-extern void			copy_triangles(int end_index, int *dest, int *src)
+void				copy_triangles(int end_index, int *dest, int *src)
 {
 	int i;
 	int j;
@@ -62,8 +115,10 @@ extern void			copy_triangles(int end_index, int *dest, int *src)
 	}
 }
 
-extern void			load_triangles(char *buf, int index[4], int *index_found)
+void				load_triangles(char *buf, int index[4], int *index_found)
 {
+	int		atoi_value;
+
 	*index_found = 0;
 	while (*buf)
 	{
@@ -72,7 +127,9 @@ extern void			load_triangles(char *buf, int index[4], int *index_found)
 		if (ft_isdigit(*buf))
 		{
 			assert(*index_found < 4);
-			index[*index_found] = atoi(buf) - 1;
+			atoi_value = atoi(buf);
+			assert(atoi_value && "face index shouln't be equal to 0");
+			index[*index_found] = atoi_value - 1;
 			*index_found = *index_found + 1;
 		}
 		while (*buf && *buf != ' ')

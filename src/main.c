@@ -6,12 +6,10 @@
 /*   By: nathan <unkown@noaddress.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/09 13:08:44 by nathan            #+#    #+#             */
-/*   Updated: 2021/01/13 10:56:15 by nathan           ###   ########.fr       */
+/*   Updated: 2021/02/15 23:59:05 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>
 #include "scop.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -84,6 +82,7 @@ GLuint	load_texture(char *path, bool has_alpha)
 
 void	release_data(t_loop_data *data)
 {
+	free(data->parse_data.data);
 	glDeleteBuffers(1, &data->vbo);
 	glDeleteVertexArrays(1, &data->vao);
 	glDeleteTextures(1, &data->texture);
@@ -100,9 +99,9 @@ int		main(int argc, char **argv)
 	if (initialize_libs_and_buffers(&window))
 		return (-1);
 	if (argc > 1)
-		file_path = ft_strjoin("resources/", argv[1]);
+		file_path = argv[1];
 	else
-		file_path = ft_strdup(DEFAULT_FILE);
+		file_path = DEFAULT_FILE;
 	initialize_buffers(&data);
 	initialize_data(&data, &file_path);
 	loop(window, &data);

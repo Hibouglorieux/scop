@@ -6,12 +6,11 @@
 /*   By: nathan <nallani@student.s19.be>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/09 17:09:10 by nathan            #+#    #+#             */
-/*   Updated: 2021/02/02 22:45:02 by nathan           ###   ########.fr       */
+/*   Updated: 2021/02/15 23:57:39 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
-#include <stdio.h>
 
 #define REFRESHING_RATE 0.0166666667f
 #define SEC_TO_MICROSEC 1000000

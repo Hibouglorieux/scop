@@ -9,6 +9,8 @@ OBJ = $(addprefix obj/,$(FILES:.c=.o))
 
 LIBS = -lglfw -lX11 -lXrandr -lXinerama -lXi -lXxf86vm -lXcursor -lGL -lpthread -ldl `pkg-config --libs glew` -lm libft/libft.a #linkage
 
+COMPILE_FLAGS = -Wall -Wextra -Werror -g
+
 
 all: $(NAME)
 
@@ -17,7 +19,7 @@ $(NAME): $(OBJ)
 	$(CC) $^ -o $@ $(LIBS)
 
 obj/%.o:src/%.c includes/*.h
-	$(CC) -Wall -Wextra -Werror -c $< -o $@ -Iincludes -Ilibft
+	$(CC) $(COMPILE_FLAGS) -c $< -o $@ -Iincludes -Ilibft
 
 clean :
 	@make clean -C libft
