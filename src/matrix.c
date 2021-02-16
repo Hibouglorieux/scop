@@ -6,11 +6,12 @@
 /*   By: nathan <unkown@noaddress.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/09 19:39:36 by nathan            #+#    #+#             */
-/*   Updated: 2021/01/13 10:56:15 by nathan           ###   ########.fr       */
+/*   Updated: 2021/02/16 05:06:45 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
+#include <math.h>
 
 t_matrix	create_proj_matrix(float fov, float aspect, float near, float far)
 {

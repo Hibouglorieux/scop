@@ -6,11 +6,12 @@
 /*   By: nathan <nallani@student.s19.be>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 00:15:03 by nathan            #+#    #+#             */
-/*   Updated: 2021/01/13 10:56:15 by nathan           ###   ########.fr       */
+/*   Updated: 2021/02/16 05:07:03 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
+#include <math.h>
 
 GLfloat		*export_matrix(t_matrix *matrix)
 {

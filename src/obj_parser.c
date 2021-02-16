@@ -6,7 +6,7 @@
 /*   By: nathan <nallani@student.s19.be>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 14:37:02 by nathan            #+#    #+#             */
-/*   Updated: 2021/02/16 01:49:57 by nathan           ###   ########.fr       */
+/*   Updated: 2021/02/16 04:58:35 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 static void						initialize_triangles_data(char *buf,
 		t_internal_tmp_parsing *int_parse_data)
 {
-	int		index[4];
+	int		index[MAX_POINTS_PER_FACE];
 	int		*ptr;
 	int		index_found;
 	int		i;

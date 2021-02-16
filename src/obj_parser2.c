@@ -6,7 +6,7 @@
 /*   By: nathan <unkown@noaddress.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/09 19:28:55 by nathan            #+#    #+#             */
-/*   Updated: 2021/02/16 01:50:30 by nathan           ###   ########.fr       */
+/*   Updated: 2021/02/16 05:11:08 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,12 @@
 #include <float.h>
 #include <math.h>
 
-static const char	*ftoi_assign(const char *str, float *assign)
+static const char	*ftoi_assign(const char *str, float *assign, double d)
 {
-	double	d;
 	float	sign;
 	int		point_found;
 	int		e;
 
-	d = 0.0;
 	sign = 1;
 	e = 0;
 	point_found = 0;
@@ -39,7 +37,8 @@ static const char	*ftoi_assign(const char *str, float *assign)
 	}
 	while (e++ < 0)
 		d *= 0.1;
-	*assign = (*str == ' ' || *str == '\0') ? (float)(d * sign) : NAN;
+	*assign = (*str == ' ' || *str == '\0' || *str == '\r') ?
+		(float)(d * sign) : NAN;
 	*assign = (point_found > 1) ? NAN : *assign;
 	return (str);
 }
@@ -51,23 +50,25 @@ int					scop_sscanf(const char *str, float f[3])
 	i = 0;
 	if (str[0] != 'v' || str[1] != ' ')
 		return (0);
-	str = ftoi_assign(str + 2, &f[0]);
+	while (*str == 'v' || *str == ' ')
+		str++;
+	str = ftoi_assign(str, &f[0], 0.0);
 	if (*str != ' ')
 		return (0);
-	str = ftoi_assign(str + 1, &f[1]);
+	str = ftoi_assign(str + 1, &f[1], 0.0);
 	if (*str != ' ')
 		return (0);
-	str = ftoi_assign(str + 1, &f[2]);
+	str = ftoi_assign(str + 1, &f[2], 0.0);
 	while (i < 3)
 	{
-		if (f[i] == NAN)
+		if (f[i] != f[i])
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-t_matrix			center_model_mat(t_parsed_data *parsed_data)
+t_vector			center_model_mat(t_parsed_data *parsed_data)
 {
 	int		i;
 	int		j;
@@ -77,9 +78,9 @@ t_matrix			center_model_mat(t_parsed_data *parsed_data)
 	min[0] = FLT_MAX;
 	min[1] = FLT_MAX;
 	min[2] = FLT_MAX;
-	max[0] = FLT_MIN;
-	max[1] = FLT_MIN;
-	max[2] = FLT_MIN;
+	max[0] = -FLT_MAX;
+	max[1] = -FLT_MAX;
+	max[2] = -FLT_MAX;
 	i = -1;
 	while (++i < parsed_data->nb_points && (j = -1))
 		while (++j < 3)
@@ -89,9 +90,9 @@ t_matrix			center_model_mat(t_parsed_data *parsed_data)
 			if (max[j] < parsed_data->data[i * 5 + j])
 				max[j] = parsed_data->data[i * 5 + j];
 		}
-	return (create_translation_matrix((max[0] - min[0]) / -2.f - min[0],
-				(max[1] - min[1]) / -2.f - min[1],
-				(max[2] - min[2]) / -2.f - min[2]));
+	return ((t_vector){(max[0] - min[0]) / -2.f - min[0],
+			(max[1] - min[1]) / -2.f - min[1],
+			(max[2] - min[2]) / -2.f - min[2], 1.0f});
 }
 
 void				copy_triangles(int end_index, int *dest, int *src)
@@ -126,7 +127,7 @@ void				load_triangles(char *buf, int index[4], int *index_found)
 			buf++;
 		if (ft_isdigit(*buf))
 		{
-			assert(*index_found < 4);
+			assert(*index_found < MAX_POINTS_PER_FACE);
 			atoi_value = atoi(buf);
 			assert(atoi_value && "face index shouln't be equal to 0");
 			index[*index_found] = atoi_value - 1;

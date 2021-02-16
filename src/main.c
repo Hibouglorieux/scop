@@ -6,7 +6,7 @@
 /*   By: nathan <unkown@noaddress.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/09 13:08:44 by nathan            #+#    #+#             */
-/*   Updated: 2021/02/15 23:59:05 by nathan           ###   ########.fr       */
+/*   Updated: 2021/02/16 05:04:32 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int		glfw_init(GLFWwindow **window)
 {
 	if (!glfwInit())
 	{
-		fprintf(stderr, "Failed to initialize GLFW\n");
+		ft_putstr_fd("Failed to initialize GLFW\n", 2);
 		getchar();
 		return (-1);
 	}
@@ -32,7 +32,7 @@ int		glfw_init(GLFWwindow **window)
 			NULL);
 	if (*window == NULL)
 	{
-		fprintf(stderr, "Failed to open GLFW window");
+		ft_putstr_fd("Failed to open GLFW window\n", 2);
 		getchar();
 		glfwTerminate();
 		return (-1);
@@ -45,7 +45,7 @@ int		glew_init(void)
 {
 	if (glewInit() != GLEW_OK)
 	{
-		fprintf(stderr, "Failed to initialize GLEW\n");
+		ft_putstr_fd("Failed to initialize GLEW\n", 2);
 		getchar();
 		glfwTerminate();
 		return (-1);

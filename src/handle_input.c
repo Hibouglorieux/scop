@@ -6,13 +6,13 @@
 /*   By: nathan <nallani@student.s19.be>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/31 00:48:56 by nathan            #+#    #+#             */
-/*   Updated: 2021/02/15 23:57:11 by nathan           ###   ########.fr       */
+/*   Updated: 2021/02/16 05:13:08 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
 
-#define MOVEMENT_PER_FRAME 0.04f
+#define MOVEMENT_PER_FRAME 0.08f
 
 void	key_callback_with_ptr(int key, t_loop_data *ptr)
 {
@@ -38,15 +38,24 @@ void	key_callback(GLFWwindow *window, int key, int scancode,
 
 void	process_input(GLFWwindow *window, t_loop_data *data)
 {
+	int	shift;
+
+	shift = 1;
 	glfwPollEvents();
+	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+		shift = 5;
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-		data->pos.z -= MOVEMENT_PER_FRAME;
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		data->pos.z += MOVEMENT_PER_FRAME;
-	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		data->pos.x += MOVEMENT_PER_FRAME;
-	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-		data->pos.x -= MOVEMENT_PER_FRAME;
+	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
+		data->target.x -= MOVEMENT_PER_FRAME * shift;
+	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+		data->target.x += MOVEMENT_PER_FRAME * shift;
+	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+		data->target.y -= MOVEMENT_PER_FRAME * shift;
+	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
+		data->target.y += MOVEMENT_PER_FRAME * shift;
+	if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
+		data->target.z -= MOVEMENT_PER_FRAME * shift;
+	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
+		data->target.z += MOVEMENT_PER_FRAME * shift;
 }

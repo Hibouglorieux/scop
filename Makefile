@@ -9,7 +9,7 @@ OBJ = $(addprefix obj/,$(FILES:.c=.o))
 
 LIBS = -lglfw -lX11 -lXrandr -lXinerama -lXi -lXxf86vm -lXcursor -lGL -lpthread -ldl `pkg-config --libs glew` -lm libft/libft.a #linkage
 
-COMPILE_FLAGS = -Wall -Wextra -Werror -g
+COMPILE_FLAGS = -Wall -Wextra -Werror -O3
 
 
 all: $(NAME)

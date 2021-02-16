@@ -6,16 +6,13 @@
 /*   By: nathan <nallani@student.s19.be>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/09 16:04:55 by nathan            #+#    #+#             */
-/*   Updated: 2021/01/13 10:56:15 by nathan           ###   ########.fr       */
+/*   Updated: 2021/02/16 05:11:39 by nathan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
-#include <stdio.h>
 #include <fcntl.h>
-#include <stdlib.h>
 #include <assert.h>
-#include <unistd.h>
 
 #define VERTEX_SHADER_SOURCE "shaders/basicshader.vert"
 #define FRAGMENT_SHADER_SOURCE "shaders/fragment.frag"
@@ -52,7 +49,8 @@ GLuint	intern_load_shader(char *str, int option)
 	if (!success)
 	{
 		glGetShaderInfoLog(retvalue, 512, NULL, info_log);
-		fprintf(stderr, "problem with shader compilation: %s\n", info_log);
+		ft_putstr_fd("problem with shader compilation: ", 2);
+		ft_putendl_fd(info_log, 2);
 		assert(false);
 	}
 	return (retvalue);
@@ -74,7 +72,8 @@ GLuint	compile_shader_program(GLuint vertex, GLuint frag)
 	if (!success)
 	{
 		glGetProgramInfoLog(shader_program, 512, NULL, info_log);
-		fprintf(stderr, "Problem with shader linkage: %s\n", info_log);
+		ft_putstr_fd("problem with shader compilation: ", 2);
+		ft_putendl_fd(info_log, 2);
 		return (0);
 	}
 	return (shader_program);
